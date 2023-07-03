@@ -3,6 +3,8 @@ version: 2
 models:
   - name: transactions
     description: 주문별 상세 정보를 담은 테이블
+    docs:
+      node_color: purple
     columns:
       - name: order_id
         tests:
@@ -55,4 +57,90 @@ models:
       - name: gift_card_amount
         description: Amount of the order (AUD) paid for by gift card
         tests:
+          - not_null
+
+  - name: stg_customer
+    description: 고객 정보를 담은 테이블
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+        description: This is a unique identifier for customer
+
+      - name: first_name
+        description: customer first name
+        tests:
+          - not_null
+
+      - name: last_name
+        description: customer last name
+        tests:
+          - not_null
+
+  - name: stg_orders
+    description: 주문 정보를 담은 테이블
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
+        description: This is a unique identifier for orders
+
+      - name: customer_id
+        description: customier_id for order
+        tests:
+          - not_null
+
+      - name: order_date
+        description: 주문 날짜
+        tests:
+          - not_null
+
+      - name: status
+        description: 배송 상태
+        tests:
+          - not_null
+
+  - name: stg_payments
+    description: 지불 정보를 담은 테이블
+    columns:
+      - name: payment_id
+        tests:
+          - unique
+          - not_null
+        description: This is a unique identifier for payments
+
+      - name: order_id
+        description: order_id for order
+        tests:
+          - not_null
+
+      - name: payment_method
+        description: 지불 방법
+        tests:
+          - not_null
+
+      - name: amount
+        description: 지불 금액
+        tests:
+          - not_null
+
+  - name: jaffle_shop
+    meta:
+      owner: 'ruby'
+    description: 구매자가 구매한 횟수에 따라 구매자를 분류
+    columns:
+      - name: buyer_type
+        description: buyer 종류
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                [ 'super_buyer', 'regular_buyer', 'single_buyer' ]
+
+      - name: customer_id
+        description: 고객 ID
+        tests:
+          - unique
           - not_null
